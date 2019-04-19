@@ -1,0 +1,41 @@
+<tool id="prep_SC_for_shiny" name="Prepare single-cell results for shiny" version="0.1.0">
+ <!--
+       A simple description of the tool that will appear in the tool panel in Galaxy. 
+-->
+<description> takes Seurat or Scanpy clustering results as input and prepares them in a format that can be visualized downstream by shiny..</description>
+ <!--  Handles exit codes in Galaxy.  -->
+<stdio>
+<exit_code range="1:"/>
+</stdio>
+<requirements>
+<requirement type="package" version="3.4.1">r-base</requirement>
+<requirement type="package" version="1.2.0">getopt</requirement>
+</requirements>
+<command>
+<![CDATA[
+Rscript  --input1 $galaxy_input1 --input2 $galaxy_input2 --output $galaxy_output
+]]>
+</command>
+<inputs>
+<param type="data" name="galaxy_input1" format="fastq" label="Fastq file"/>
+<param type="integer" name="galaxy_input2" value="1" label="Kmer size to count"/>
+</inputs>
+<outputs>
+<data name="galaxy_output" format="txt"/>
+</outputs>
+<tests>
+<test>
+<param name="galaxy_input1" value="/path/to/example_seqTools/test_data/test_input.fq.gz"/>
+<param name="galaxy_input2" value="2"/>
+<output name="galaxy_output" file="/path/to/example_seqTools/test_data/test_output.txt"/>
+</test>
+</tests>
+<help>
+<![CDATA[ Reads in fastq file and enumerates kmers. ]]>
+</help>
+<citations>
+<citation type="bibtex">
+@Manual{seqtools, title = {seqTools: Analysis of nucleotide, sequence and quality content on fastq files.}, author = {Wolfgang Kaisers}, year = {2013}, note = {R package version 1.4.1}, url = {http://bioconductor.org/packages/seqTools/}, }
+</citation>
+</citations>
+</tool>
