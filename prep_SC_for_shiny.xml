@@ -2,7 +2,7 @@
  <!--
        A simple description of the tool that will appear in the tool panel in Galaxy. 
 -->
-<description> takes Seurat or Scanpy clustering results as input and prepares them in a format that can be visualized downstream by shiny..</description>
+<description> takes Seurat or Scanpy clustering results as input and prepares them in a format that can be visualized downstream by the Genap2 shiny.</description>
  <!--  Handles exit codes in Galaxy.  -->
 <stdio>
 <exit_code range="1:"/>
@@ -10,32 +10,33 @@
 <requirements>
 <requirement type="package" version="3.4.1">r-base</requirement>
 <requirement type="package" version="1.2.0">getopt</requirement>
+<requirement type="package" version="2.3.4">r-seurat</requirement>
 </requirements>
 <command>
 <![CDATA[
-Rscript  --input1 $galaxy_input1 --input2 $galaxy_input2 --output $galaxy_output
+Rscript /cvmfs/soft.galaxy/v2.1/server/tools/ --input1 $seurat_object --input2 $marker_list $ --output1 $shiny_data --output2 $centroids --output3 $gene_names --output4 $marker_list
 ]]>
 </command>
 <inputs>
-<param type="data" name="galaxy_input1" format="fastq" label="Fastq file"/>
-<param type="integer" name="galaxy_input2" value="1" label="Kmer size to count"/>
+<param type="data" name="seurat_object" format="rdata" label="seurat object (Rds)"/>
+<param type="data" name="marker_list" format="txt" label="Seurat Marker list"/>
 </inputs>
 <outputs>
-<data name="galaxy_output" format="txt"/>
+<data name="shiny_data" format="rdata"/>
+<data name="centroids" format="txt"/>
+<data name="gene_names" format="txt"/>
+<data name="marker_list" format="txt"/>
 </outputs>
 <tests>
 <test>
-<param name="galaxy_input1" value="/path/to/example_seqTools/test_data/test_input.fq.gz"/>
-<param name="galaxy_input2" value="2"/>
-<output name="galaxy_output" file="/path/to/example_seqTools/test_data/test_output.txt"/>
+<param name="seurat_object" value=""/>
+<output name="shiny_data" file=""/>
+<data name="centroids" format="txt"/>
+<data name="gene_names" format="txt"/>
+<data name="marker_list" format="txt"/>
 </test>
 </tests>
 <help>
-<![CDATA[ Reads in fastq file and enumerates kmers. ]]>
+<![CDATA[ Reads in clustering results from Seurat and reformats data for Genap2 shiny visualization.]]>
 </help>
-<citations>
-<citation type="bibtex">
-@Manual{seqtools, title = {seqTools: Analysis of nucleotide, sequence and quality content on fastq files.}, author = {Wolfgang Kaisers}, year = {2013}, note = {R package version 1.4.1}, url = {http://bioconductor.org/packages/seqTools/}, }
-</citation>
-</citations>
 </tool>
