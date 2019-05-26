@@ -55,7 +55,7 @@ rownames(cell_embeddings_with_expression) <- cell_embeddings_with_expression$Row
 cell_embeddings_with_expression <- cell_embeddings_with_expression[2:ncol(cell_embeddings_with_expression)]
 cell_embeddings_with_expression <- merge(cell_embeddings_with_expression,norm_data,by=0)
 
-## calculat cluster centers and other metadata
+## calculate cluster centers and other metadata
 cluster_centers <- cell_embeddings_with_expression %>%
   dplyr::group_by(cell_classification) %>%
   summarise_at(vars(tSNE_1,tSNE_2),funs(mean(., na.rm=TRUE)))
@@ -95,6 +95,6 @@ fwrite(marker_list_formatted,
 #        file = "/Users/florian_wuennemann/Postdoc/Genap/data/gene_names.tsv")
 # 
 # fwrite(marker_list_formatted,
-#        file = "/Users/florian_wuennemann/Postdoc/Genap/data/gene_names.tsv")
+#        file = "/Users/florian_wuennemann/Postdoc/Genap/data/marker_table.tsv")
 
 cat("\n Successfully transformed data! \n")

@@ -14,7 +14,7 @@
 </requirements>
 <command>
 <![CDATA[
-Rscript /cvmfs/soft.galaxy/v2.1/server/tools/ --input1 $seurat_object --input2 $marker_list $ --output1 $shiny_data --output2 $centroids --output3 $gene_names --output4 $marker_list
+Rscript /cvmfs/soft.galaxy/v2.1/server/tools/ --input1 $seurat_object --input2 $marker_list --output1 $shiny_data --output2 $centroids --output3 $gene_names --output4 $marker_list
 ]]>
 </command>
 <inputs>
