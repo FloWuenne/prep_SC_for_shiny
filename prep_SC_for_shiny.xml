@@ -9,12 +9,15 @@
 </stdio>
 <requirements>
 <requirement type="package" version="3.4.1">r-base</requirement>
-<requirement type="package" version="1.2.0">getopt</requirement>
+<requirement type="package" version="1.20.0">r-getopt</requirement>
 <requirement type="package" version="2.3.4">r-seurat</requirement>
+<requirement type="package" version="0.3.1">r-feather</requirement>
+<requirement type="package" version="1.10.4">r-data.table</requirement>
+<requirement type="package" version="0.7.6">r-dplyr</requirement>
 </requirements>
 <command>
 <![CDATA[
-Rscript /cvmfs/soft.galaxy/v2.1/server/tools/ --input1 $seurat_object --input2 $marker_list --output1 $shiny_data --output2 $centroids --output3 $gene_names --output4 $marker_list
+Rscript /cvmfs/soft.galaxy/v2.1/server/tools/prep_SC_for_shiny/prep_SC_for_shiny.R --input1 $seurat_object --input2 $marker_list --output1 $shiny_data --output2 $centroids --output3 $gene_names --output4 $formatted_marker_list
 ]]>
 </command>
 <inputs>
@@ -25,15 +28,15 @@ Rscript /cvmfs/soft.galaxy/v2.1/server/tools/ --input1 $seurat_object --input2 $
 <data name="shiny_data" format="rdata"/>
 <data name="centroids" format="txt"/>
 <data name="gene_names" format="txt"/>
-<data name="marker_list" format="txt"/>
+<data name="formatted_marker_list" format="txt"/>
 </outputs>
 <tests>
 <test>
 <param name="seurat_object" value=""/>
 <output name="shiny_data" file=""/>
-<data name="centroids" format="txt"/>
-<data name="gene_names" format="txt"/>
-<data name="marker_list" format="txt"/>
+<output name="centroids" format="txt"/>
+<output name="gene_names" format="txt"/>
+<output name="marker_list" format="txt"/>
 </test>
 </tests>
 <help>

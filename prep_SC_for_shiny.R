@@ -12,7 +12,8 @@ suppressPackageStartupMessages({
   library("getopt")
   library("Seurat")
   library("feather")
-
+  library("data.table")
+  library("dplyr")
 })
 
 # Import required libraries
