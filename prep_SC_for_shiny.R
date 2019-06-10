@@ -27,11 +27,11 @@ args <- commandArgs(trailingOnly = TRUE)
 option_specification = matrix(c(
   'input1', 'i1', 2, 'character',
   'input2', 'i2', 2, 'character',
-  'input3', 'i3',2,'character',
-  'input4', 'i3',2,'character',
+  'input3', 'i3', 2,'character',
+  'input4', 'i4', 2,'character',
   'output1', 'o1', 2, 'character',
   'output2', 'o2', 2, 'character',
-  'output3', 'o3', 2, 'character',
+  'output3', 'o3', 2, 'character'
 ), byrow=TRUE, ncol=4)
 
 # Parse options
@@ -63,9 +63,9 @@ if(filetype == "scanpy"){
 ## If Scanpy get UMAP, if Seurat get tSNE
 ## Check whether user used Seurat or Scanpy
 embeddings <- options$input4
-if(filetype == "umap"){
+if(embeddings == "umap"){
   cell_embeddings <- as.data.frame(seurat_object@reductions$umap@cell.embeddings)
-} else if (filetype == "tsne"){
+} else if (embeddings == "tsne"){
   cell_embeddings <- as.data.frame(seurat_object@reductions$tsne@cell.embeddings)
 }
 
