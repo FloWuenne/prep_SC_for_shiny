@@ -9,7 +9,7 @@
 </stdio>
 <requirements>
 <requirement type="package" version="3.5.1">r-base</requirement>
-<requirement type="package" version="1.20.0">r-getopt</requirement>
+<requirement type="package" version="1.20.3">r-getopt</requirement>
 <requirement type="package" version="3.0.1">r-seurat</requirement>
 <requirement type="package" version="0.3.1">r-feather</requirement>
 <requirement type="package" version="1.10.4">r-data.table</requirement>
