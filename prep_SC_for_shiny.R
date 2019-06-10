@@ -44,16 +44,19 @@ options = getopt(option_specification)
 #marker_list <- fread("/Users/florian_wuennemann/Postdoc/Genap/data/test_marker_list.txt")
 
 ## Check whether user used Seurat or Scanpy
+marker_list <- fread(options$input2)
+
 filetype <- options$input3
 if(filetype == "scanpy"){
   pbmc3k <- ReadH5AD(file = options$input1)
+  marker_list_formatted <- marker_list
 } else if (filetype == "seurat"){
   seurat_object <- readRDS(options$input1)
   seurat_object <- UpdateSeuratObject(seurat_object)
+  ## Format Marker list
+  marker_list_formatted <- marker_list %>%
+    select(-V1)
 }
-
-seurat_object <- readRDS(options$input1)
-marker_list <- fread(options$input2)
 
 ## Extract mapping from Seurat object
 
@@ -80,11 +83,6 @@ cell_embeddings_with_expression <- merge(cell_embeddings_with_expression,norm_da
 ## get gene names
 gene_names <- rownames(seurat_object@data)
 gene_names_df <- data.frame("genes" = gene_names)
-
-## Format Marker list
-marker_list_formatted <- marker_list %>%
-  select(-V1) %>%
-  mutate("pct.diff" = pct.2 - pct.1)
 
 # Write feather file
 write_feather(cell_embeddings_with_expression,

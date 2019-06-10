@@ -21,8 +21,8 @@ Rscript /cvmfs/soft.galaxy/v2.1/server/tools/prep_SC_for_shiny/prep_SC_for_shiny
 ]]>
 </command>
 <inputs>
-<param type="data" name="seurat_object" format="rdata" label="seurat object (Rds)"/>
-<param type="data" name="marker_list" format="txt" label="Seurat Marker list"/>
+<param type="data" name="seurat_object" format="rdata" label="Clustered object (Seurat or h5ad)"/>
+<param type="data" name="marker_list" format="txt" label="Marker list"/>
 <param name="input_format" label="Select the workflow you executed:" type="select" multiple="false" format="text" help="Choose the single-cell processing workflow your data has been analysed with!">
 	<option value ="scanpy">Scanpy</option>
 	<option value ="seurat">seurat</option>
@@ -35,7 +35,6 @@ Rscript /cvmfs/soft.galaxy/v2.1/server/tools/prep_SC_for_shiny/prep_SC_for_shiny
 </inputs>
 <outputs>
 <data name="shiny_data" format="rdata"/>
-<data name="centroids" format="rdata"/>
 <data name="gene_names" format="txt"/>
 <data name="formatted_marker_list" format="txt"/>
 </outputs>
