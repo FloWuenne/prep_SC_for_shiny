@@ -27,10 +27,11 @@ args <- commandArgs(trailingOnly = TRUE)
 option_specification = matrix(c(
   'input1', 'i1', 2, 'character',
   'input2', 'i2', 2, 'character',
+  'input3', 'i3',2,'character',
+  'input4', 'i3',2,'character',
   'output1', 'o1', 2, 'character',
   'output2', 'o2', 2, 'character',
   'output3', 'o3', 2, 'character',
-  'output4', 'o4', 2, 'character'
 ), byrow=TRUE, ncol=4)
 
 # Parse options
@@ -42,14 +43,32 @@ options = getopt(option_specification)
 # seurat_object <- readRDS(seurat_file)
 #marker_list <- fread("/Users/florian_wuennemann/Postdoc/Genap/data/test_marker_list.txt")
 
+## Check whether user used Seurat or Scanpy
+filetype <- options$input3
+if(filetype == "scanpy"){
+  pbmc3k <- ReadH5AD(file = options$input1)
+} else if (filetype == "seurat"){
+  seurat_object <- readRDS(options$input1)
+  seurat_object <- UpdateSeuratObject(seurat_object)
+}
+
 seurat_object <- readRDS(options$input1)
 marker_list <- fread(options$input2)
 
 ## Extract mapping from Seurat object
-cell_embeddings <- as.data.frame(seurat_object@dr$tsne@cell.embeddings)
+
+## If Scanpy get UMAP, if Seurat get tSNE
+## Check whether user used Seurat or Scanpy
+embeddings <- options$input4
+if(filetype == "umap"){
+  cell_embeddings <- as.data.frame(seurat_object@reductions$umap@cell.embeddings)
+} else if (filetype == "tsne"){
+  cell_embeddings <- as.data.frame(seurat_object@reductions$tsne@cell.embeddings)
+}
+
 metadata <- seurat_object@meta.data
-metadata$cell_classification <- seurat_object@ident
-norm_data <- t(as.data.frame(as.matrix(seurat_object@data)))
+metadata$cell_classification <- seurat_object@active.ident
+norm_data <- t(as.data.frame(as.matrix(seurat_object@assays$RNA@data)))
 
 cell_embeddings_with_expression <- merge(cell_embeddings,metadata,by=0)
 rownames(cell_embeddings_with_expression) <- cell_embeddings_with_expression$Row.names
@@ -57,10 +76,6 @@ cell_embeddings_with_expression <- cell_embeddings_with_expression[2:ncol(cell_e
 cell_embeddings_with_expression <- merge(cell_embeddings_with_expression,norm_data,by=0)
 
 ## calculate cluster centers and other metadata
-cluster_centers <- cell_embeddings_with_expression %>%
-  dplyr::group_by(cell_classification) %>%
-  summarise_at(vars(tSNE_1,tSNE_2),funs(mean(., na.rm=TRUE)))
-cluster_centers <- as.data.frame(cluster_centers)
 
 ## get gene names
 gene_names <- rownames(seurat_object@data)
@@ -75,27 +90,10 @@ marker_list_formatted <- marker_list %>%
 write_feather(cell_embeddings_with_expression,
 path = options$output1)
 
-write_feather(cluster_centers,
-path = options$output2)
-
 fwrite(gene_names_df,
-       file = options$output3)
+       file = options$output2)
 
 fwrite(marker_list_formatted,
-       file = options$output4)
-
-# ## Save embeddings with expression data
-# write_feather(cell_embeddings_with_expression,
-#               path = "/Users/florian_wuennemann/Postdoc/Genap/data/clustering_shiny.feather")
-# 
-# ## Save centroids and cluster information
-# write_feather(cluster_centers,
-#               path = "/Users/florian_wuennemann/Postdoc/Genap/data/cluster_info_shiny.feather")
-# 
-# fwrite(gene_names_df,
-#        file = "/Users/florian_wuennemann/Postdoc/Genap/data/gene_names.tsv")
-# 
-# fwrite(marker_list_formatted,
-#        file = "/Users/florian_wuennemann/Postdoc/Genap/data/marker_table.tsv")
+       file = options$output3)
 
 cat("\n Successfully transformed data! \n")

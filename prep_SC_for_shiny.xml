@@ -17,12 +17,21 @@
 </requirements>
 <command>
 <![CDATA[
-Rscript /cvmfs/soft.galaxy/v2.1/server/tools/prep_SC_for_shiny/prep_SC_for_shiny.R --input1 $seurat_object --input2 $marker_list --output1 $shiny_data --output2 $centroids --output3 $gene_names --output4 $formatted_marker_list
+Rscript /cvmfs/soft.galaxy/v2.1/server/tools/prep_SC_for_shiny/prep_SC_for_shiny.R --input1 $seurat_object --input2 $marker_list --input3 $input_format --input4 $embeddings --output1 $shiny_data --output2 $gene_names --output3 $formatted_marker_list
 ]]>
 </command>
 <inputs>
 <param type="data" name="seurat_object" format="rdata" label="seurat object (Rds)"/>
 <param type="data" name="marker_list" format="txt" label="Seurat Marker list"/>
+<param name="input_format" label="Select the workflow you executed:" type="select" multiple="false" format="text" help="Choose the single-cell processing workflow your data has been analysed with!">
+	<option value ="scanpy">Scanpy</option>
+	<option value ="seurat">seurat</option>
+</param>
+<param name="embeddings" label="Which dimensional reduction should be retrieved?" type="select" multiple="false" format="text" help="Choose the dimensional reduction (tsne, umap) that you want to retrieve!">
+	<option value ="tsne">tSNE</option>
+	<option value ="umap">Umap</option>
+</param>
+
 </inputs>
 <outputs>
 <data name="shiny_data" format="rdata"/>
