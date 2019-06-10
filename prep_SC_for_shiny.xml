@@ -8,7 +8,7 @@
 <exit_code range="1:"/>
 </stdio>
 <requirements>
-<requirement type="package" version="3.4.1">r-base</requirement>
+<requirement type="package" version="3.5.1">r-base</requirement>
 <requirement type="package" version="1.20.0">r-getopt</requirement>
 <requirement type="package" version="2.3.4">r-seurat</requirement>
 <requirement type="package" version="0.3.1">r-feather</requirement>
@@ -35,7 +35,7 @@ Rscript /cvmfs/soft.galaxy/v2.1/server/tools/prep_SC_for_shiny/prep_SC_for_shiny
 </inputs>
 <outputs>
 <data name="shiny_data" format="rdata"/>
-<data name="centroids" format="txt"/>
+<data name="centroids" format="rdata"/>
 <data name="gene_names" format="txt"/>
 <data name="formatted_marker_list" format="txt"/>
 </outputs>
