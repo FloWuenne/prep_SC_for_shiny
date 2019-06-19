@@ -91,7 +91,7 @@ path = options$output1)
 fwrite(gene_names_df,
        file = options$output2)
 
-fwrite(marker_list_formatted,
-       file = options$output3)
+# fwrite(marker_list_formatted,
+#        file = options$output3)
 
 cat("\n Successfully transformed data! \n")
