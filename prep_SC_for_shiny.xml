@@ -2,7 +2,7 @@
  <!--
        A simple description of the tool that will appear in the tool panel in Galaxy. 
 -->
-<description> takes Seurat or Scanpy clustering results as input and prepares them in a format that can be visualized downstream by the Genap2 shiny.</description>
+<description> takes Seurat or Scanpy clustering results as input and prepares them in a format that can be visualized downstream by the scCluster_genap2 app.</description>
  <!--  Handles exit codes in Galaxy.  -->
 <stdio>
 <exit_code range="1:"/>
@@ -17,7 +17,7 @@
 </requirements>
 <command>
 <![CDATA[
-Rscript /cvmfs/soft.galaxy/v2.1/server/tools/prep_SC_for_shiny/prep_SC_for_shiny.R --input1 $seurat_object --input2 $marker_list --input3 $input_format --input4 $embeddings --output1 $shiny_data --output2 $gene_names --output3 $formatted_marker_list
+Rscript /cvmfs/soft.galaxy/v2.1/server/tools/prep_SC_for_shiny/prep_SC_for_shiny.R --input1 $seurat_object --input2 $input_format --input3 $embeddings --output1 $shiny_data --output2 $gene_names --output3 $user_clusters --output4 $sparseMatrix_marker
 ]]>
 </command>
 <inputs>
@@ -35,15 +35,16 @@ Rscript /cvmfs/soft.galaxy/v2.1/server/tools/prep_SC_for_shiny/prep_SC_for_shiny
 <outputs>
 <data name="shiny_data" format="rdata"/>
 <data name="gene_names" format="txt"/>
-<data name="formatted_marker_list" format="txt"/>
+<data name="user_clusters" format="rdata"/>
+<data name="sparseMatrix_marker" format="rdata"/>
 </outputs>
 <tests>
 <test>
 <param name="seurat_object" value=""/>
-<output name="shiny_data" file=""/>
-<output name="centroids" format="txt"/>
-<output name="gene_names" format="txt"/>
-<output name="marker_list" format="txt"/>
+<data name="shiny_data" format="rdata"/>
+<data name="gene_names" format="txt"/>
+<data name="user_clusters" format="rdata"/>
+<data name="sparseMatrix_marker" format="rdata"/>
 </test>
 </tests>
 <help>

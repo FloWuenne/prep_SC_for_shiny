@@ -30,35 +30,29 @@ option_specification = matrix(c(
   'input3', 'i3', 2,'character',
   'output1', 'o1', 2, 'character',
   'output2', 'o2', 2, 'character',
-  'output3', 'o3', 2, 'character'
+  'output3', 'o3', 2, 'character',
+  'output4', 'o4', 2, 'character'
 ), byrow=TRUE, ncol=4)
 
 # Parse options
 options = getopt(option_specification)
 
-## Read in alevin sparse Matrix as RDS file
-#seurat_file <- "/Users/florian_wuennemann/Postdoc/Genap/prep_SC_for_shiny/test_data/seurat_tsne_test.Rds"
-# seurat_file <- "/Users/florian_wuennemann/Postdoc/Genap/data/large_seurat_test.Rds"
-# seurat_object <- readRDS(seurat_file)
-#marker_list <- fread("/Users/florian_wuennemann/Postdoc/Genap/data/test_marker_list.txt")
-
 ## Check whether user used Seurat or Scanpy
+## If Seurat, update Object to v3
+## If Scanpy, convert to seurat object, then update
 filetype <- options$input2
 if(filetype == "scanpy"){
-  pbmc3k <- ReadH5AD(file = options$input1)
-  marker_list_formatted <- marker_list
+  seurat_object <- ReadH5AD(file = options$input1)
+  seurat_object <- UpdateSeuratObject(seurat_object)
+
 } else if (filetype == "seurat"){
   seurat_object <- readRDS(options$input1)
   seurat_object <- UpdateSeuratObject(seurat_object)
-  ## Format Marker list
-  marker_list_formatted <- marker_list %>%
-    select(-V1)
 }
 
-## Extract mapping from Seurat object
+## Create data frame containing embeddings, metadata and expression values for feather file interaction
 
-## If Scanpy get UMAP, if Seurat get tSNE
-## Check whether user used Seurat or Scanpy
+## Check which type of embedding the user wants to use
 embeddings <- options$input3
 if(embeddings == "umap"){
   cell_embeddings <- as.data.frame(seurat_object@reductions$umap@cell.embeddings)
@@ -66,34 +60,48 @@ if(embeddings == "umap"){
   cell_embeddings <- as.data.frame(seurat_object@reductions$tsne@cell.embeddings)
 }
 
+
+## Merge metadata, embeddings and normalised expression
 metadata <- seurat_object@meta.data
 metadata$cell_classification <- seurat_object@active.ident
 norm_data <- t(as.data.frame(as.matrix(seurat_object@assays$RNA@data)))
 
 cell_embeddings_with_expression <- merge(cell_embeddings,metadata,by=0)
+cell_embeddings_with_expression$cell_id <- cell_embeddings_with_expression$Row.names
 rownames(cell_embeddings_with_expression) <- cell_embeddings_with_expression$Row.names
 cell_embeddings_with_expression <- cell_embeddings_with_expression[2:ncol(cell_embeddings_with_expression)]
 cell_embeddings_with_expression <- merge(cell_embeddings_with_expression,norm_data,by=0)
 
-## calculate cluster centers and other metadata
-
-## get gene names
+## get gene names for shiny
 gene_names <- rownames(seurat_object@data)
 gene_names_df <- data.frame("genes" = gene_names)
 
+## Prepare sparse matrix for marker calculation
+cell_embeddings_with_expression_genes <- cell_embeddings_with_expression[,gene_names_df$genes]
+cell_embeddings_with_expression_genes_transposed_sparse <- as(t(cell_embeddings_with_expression_genes), "sparseMatrix")
+
+## prepare a small dataset only containing cell IDs and initial clustering for shiny
+shiny_user_clustering <- cell_embeddings_with_expression_genes %>%
+  select(cell_id,cell_classification)
+
+####
 # Write output files
 
 ## 1) Feather file containing clustering and metadata
 write_feather(cell_embeddings_with_expression,
-path = options$output1)
+              path = options$output1)
 
 ## 2) data table containing gene names
 fwrite(gene_names_df,
        file = options$output2)
 
 ## 3) File containing the clustering for user defined cluster saving
+write_feather(shiny_user_clustering,
+              path = options$output3)
 
 ## 4) sparseMatrix for genes as .rds object to use for presto marker calculation
-
+saveRDS(cell_embeddings_with_expression_genes_transposed_sparse,
+        file = options$output4)
 
 cat("\n Successfully transformed data! \n")
+
