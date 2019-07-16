@@ -28,7 +28,6 @@ option_specification = matrix(c(
   'input1', 'i1', 2, 'character',
   'input2', 'i2', 2, 'character',
   'input3', 'i3', 2,'character',
-  'input4', 'i4', 2,'character',
   'output1', 'o1', 2, 'character',
   'output2', 'o2', 2, 'character',
   'output3', 'o3', 2, 'character'
@@ -44,9 +43,7 @@ options = getopt(option_specification)
 #marker_list <- fread("/Users/florian_wuennemann/Postdoc/Genap/data/test_marker_list.txt")
 
 ## Check whether user used Seurat or Scanpy
-marker_list <- fread(options$input2)
-
-filetype <- options$input3
+filetype <- options$input2
 if(filetype == "scanpy"){
   pbmc3k <- ReadH5AD(file = options$input1)
   marker_list_formatted <- marker_list
@@ -62,7 +59,7 @@ if(filetype == "scanpy"){
 
 ## If Scanpy get UMAP, if Seurat get tSNE
 ## Check whether user used Seurat or Scanpy
-embeddings <- options$input4
+embeddings <- options$input3
 if(embeddings == "umap"){
   cell_embeddings <- as.data.frame(seurat_object@reductions$umap@cell.embeddings)
 } else if (embeddings == "tsne"){
@@ -84,14 +81,19 @@ cell_embeddings_with_expression <- merge(cell_embeddings_with_expression,norm_da
 gene_names <- rownames(seurat_object@data)
 gene_names_df <- data.frame("genes" = gene_names)
 
-# Write feather file
+# Write output files
+
+## 1) Feather file containing clustering and metadata
 write_feather(cell_embeddings_with_expression,
 path = options$output1)
 
+## 2) data table containing gene names
 fwrite(gene_names_df,
        file = options$output2)
 
-# fwrite(marker_list_formatted,
-#        file = options$output3)
+## 3) File containing the clustering for user defined cluster saving
+
+## 4) sparseMatrix for genes as .rds object to use for presto marker calculation
+
 
 cat("\n Successfully transformed data! \n")
