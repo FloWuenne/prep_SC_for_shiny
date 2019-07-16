@@ -69,8 +69,10 @@ metadata$cell_classification <- seurat_object@active.ident
 normalization <- options$input4
 if(normalization == "RNA"){
   norm_data <- t(as.data.frame(as.matrix(seurat_object@assays$RNA@data)))
+  gene_names <- rownames(seurat_object@assays$RNA@data)
 }else if(normalization == "SCT"){
   norm_data <- t(as.data.frame(as.matrix(seurat_object@assays$SCT@data)))
+  gene_names <- rownames(seurat_object@assays$SCT@data)
 }
 
 cell_embeddings_with_expression <- merge(cell_embeddings,metadata,by=0)
@@ -80,7 +82,6 @@ cell_embeddings_with_expression <- cell_embeddings_with_expression[2:ncol(cell_e
 cell_embeddings_with_expression <- merge(cell_embeddings_with_expression,norm_data,by=0)
 
 ## get gene names for shiny
-gene_names <- rownames(seurat_object@data)
 gene_names_df <- data.frame("genes" = gene_names)
 
 ## Prepare sparse matrix for marker calculation
