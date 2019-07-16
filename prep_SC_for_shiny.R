@@ -8,7 +8,6 @@ options(show.error.messages=F, error=function(){cat(geterrmessage(),file=stderr(
 loc <- Sys.setlocale("LC_MESSAGES", "en_US.UTF-8")
 
 suppressPackageStartupMessages({
-  
   library("getopt")
   library("Seurat")
   library("feather")
@@ -28,7 +27,7 @@ option_specification = matrix(c(
   'input1', 'i1', 2, 'character',
   'input2', 'i2', 2, 'character',
   'input3', 'i3', 2,'character',
-  'input4', 'i3', 2,'character',
+  'input4', 'i4', 2,'character',
   'output1', 'o1', 2, 'character',
   'output2', 'o2', 2, 'character',
   'output3', 'o3', 2, 'character',
