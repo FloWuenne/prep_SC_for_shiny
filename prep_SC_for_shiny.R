@@ -28,6 +28,7 @@ option_specification = matrix(c(
   'input1', 'i1', 2, 'character',
   'input2', 'i2', 2, 'character',
   'input3', 'i3', 2,'character',
+  'input4', 'i3', 2,'character',
   'output1', 'o1', 2, 'character',
   'output2', 'o2', 2, 'character',
   'output3', 'o3', 2, 'character',
@@ -64,7 +65,14 @@ if(embeddings == "umap"){
 ## Merge metadata, embeddings and normalised expression
 metadata <- seurat_object@meta.data
 metadata$cell_classification <- seurat_object@active.ident
-norm_data <- t(as.data.frame(as.matrix(seurat_object@assays$RNA@data)))
+
+## Select the normalization method the user chose
+normalization <- options$input4
+if(normalization == "RNA"){
+  norm_data <- t(as.data.frame(as.matrix(seurat_object@assays$RNA@data)))
+}else if(normalization == "SCT"){
+  norm_data <- t(as.data.frame(as.matrix(seurat_object@assays$SCT@data)))
+}
 
 cell_embeddings_with_expression <- merge(cell_embeddings,metadata,by=0)
 cell_embeddings_with_expression$cell_id <- cell_embeddings_with_expression$Row.names

@@ -17,7 +17,7 @@
 </requirements>
 <command>
 <![CDATA[
-Rscript /cvmfs/soft.galaxy/v2.1/server/tools/prep_SC_for_shiny/prep_SC_for_shiny.R --input1 $seurat_object --input2 $input_format --input3 $embeddings --output1 $shiny_data --output2 $gene_names --output3 $user_clusters --output4 $sparseMatrix_marker
+Rscript /cvmfs/soft.galaxy/v2.1/server/tools/prep_SC_for_shiny/prep_SC_for_shiny.R --input1 $seurat_object --input2 $input_format --input3 $embeddings --input4 $normalization --output1 $shiny_data --output2 $gene_names --output3 $user_clusters --output4 $sparseMatrix_marker
 ]]>
 </command>
 <inputs>
@@ -29,6 +29,10 @@ Rscript /cvmfs/soft.galaxy/v2.1/server/tools/prep_SC_for_shiny/prep_SC_for_shiny
 <param name="embeddings" label="Which dimensional reduction should be retrieved?" type="select" multiple="false" format="text" help="Choose the dimensional reduction (tsne, umap) that you want to retrieve!">
 	<option value ="tsne">tSNE</option>
 	<option value ="umap">Umap</option>
+</param>
+<param name="normalization" label="Select the Seurat normalization you used:" type="select" multiple="false" format="text" help="Choose the single-cell processing workflow your data has been analysed with!">
+	<option value ="RNA">Standard normalization (RNA slot)</option>
+	<option value ="SCT">SCTransform normalization (SCT slot)</option>
 </param>
 
 </inputs>
