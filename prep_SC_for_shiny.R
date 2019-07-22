@@ -42,9 +42,8 @@ options = getopt(option_specification)
 ## If Scanpy, convert to seurat object, then update
 filetype <- options$input2
 if(filetype == "scanpy"){
-  seurat_object <- ReadH5AD(file = options$input1)
-  seurat_object <- UpdateSeuratObject(seurat_object)
-
+  scanpy_object <- ReadH5AD(file = options$input1)
+  seurat_object <- UpdateSeuratObject(scanpy_object)
 } else if (filetype == "seurat"){
   seurat_object <- readRDS(options$input1)
   seurat_object <- UpdateSeuratObject(seurat_object)

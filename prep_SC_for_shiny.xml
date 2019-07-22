@@ -17,11 +17,11 @@
 </requirements>
 <command>
 <![CDATA[
-Rscript /cvmfs/soft.galaxy/v2.1/server/tools/prep_SC_for_shiny/prep_SC_for_shiny.R --input1 $seurat_object --input2 $input_format --input3 $embeddings --input4 $normalization --output1 $shiny_data --output2 $gene_names --output3 $user_clusters --output4 $sparseMatrix_marker
+Rscript /cvmfs/soft.galaxy/v2.1/server/tools/prep_SC_for_shiny/prep_SC_for_shiny.R --input1 $cluster_object --input2 $input_format --input3 $embeddings --input4 $normalization --output1 $shiny_data --output2 $gene_names --output3 $user_clusters --output4 $sparseMatrix_marker
 ]]>
 </command>
 <inputs>
-<param type="data" name="seurat_object" format="rdata" label="Clustered object (Seurat or h5ad)"/>
+<param type="data" name="cluster_object" format="rdata" label="Clustered object (Seurat or h5ad)"/>
 <param name="input_format" label="Select the workflow you executed:" type="select" multiple="false" format="text" help="Choose the single-cell processing workflow your data has been analysed with!">
 	<option value ="scanpy">Scanpy</option>
 	<option value ="seurat">seurat</option>
@@ -44,7 +44,7 @@ Rscript /cvmfs/soft.galaxy/v2.1/server/tools/prep_SC_for_shiny/prep_SC_for_shiny
 </outputs>
 <tests>
 <test>
-<param name="seurat_object" value=""/>
+<param name="cluster_object" value=""/>
 <data name="shiny_data" format="rdata"/>
 <data name="gene_names" format="txt"/>
 <data name="user_clusters" format="rdata"/>
