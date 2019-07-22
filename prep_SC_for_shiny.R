@@ -95,20 +95,16 @@ shiny_user_clustering <- cell_embeddings_with_expression_genes %>%
 # Write output files
 
 ## 1) Feather file containing clustering and metadata
-write_feather(cell_embeddings_with_expression,
-              path = options$output1)
+write_feather(cell_embeddings_with_expression, path = options$output1)
 
 ## 2) data table containing gene names
-fwrite(gene_names_df,
-       file = options$output2)
+fwrite(gene_names_df, file = options$output2)
 
 ## 3) File containing the clustering for user defined cluster saving
-write_feather(shiny_user_clustering,
-              path = options$output3)
+write_feather(shiny_user_clustering, path = options$output3)
 
 ## 4) sparseMatrix for genes as .rds object to use for presto marker calculation
-saveRDS(cell_embeddings_with_expression_genes_transposed_sparse,
-        file = options$output4)
+saveRDS(cell_embeddings_with_expression_genes_transposed_sparse, file = options$output4)
 
 cat("\n Successfully transformed data! \n")
 
