@@ -18,6 +18,14 @@
 <command>
 <![CDATA[
 Rscript /cvmfs/soft.galaxy/v2.1/server/tools/prep_SC_for_shiny/prep_SC_for_shiny.R --input1 $cluster_object --input2 $input_format --input3 $embeddings --input4 $normalization --output1 $shiny_data --output2 $gene_names --output3 $user_clusters --output4 $sparseMatrix_marker
+&&
+ln -s $shiny_data ./shiny_clustering_file.feather
+&&
+ln -s $gene_names ./shiny_gene_names.tsv
+&&
+ln -s $user_clusters ./shiny_user_clustering.feather
+&&
+ln -s $sparseMatrix_marker ./shiny_clustering.sparse_presto.rds
 ]]>
 </command>
 <inputs>
